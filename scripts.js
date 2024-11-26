@@ -1,37 +1,43 @@
-// Smooth scroll for navigation links
-const navLinks = document.querySelectorAll('nav ul li a');
+const taskInput = document.getElementById('taskInput');
+const addButton = document.getElementById('addButton');
+const taskList = document.getElementById('taskList');
 
-navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href').slice(1); // Remove the # symbol
-        const targetSection = document.getElementById(targetId);
-        window.scrollTo({
-            top: targetSection.offsetTop - 50, // Adjust for the nav height
-            behavior: 'smooth'
+// Add event listener for adding a task
+addButton.addEventListener('click', function() {
+    const taskText = taskInput.value.trim();
+
+    if (taskText !== '') {
+        // Create a new list item
+        const li = document.createElement('li');
+
+        // Create the task text
+        const span = document.createElement('span');
+        span.textContent = taskText;
+
+        // Add a "complete" button
+        const completeButton = document.createElement('button');
+        completeButton.textContent = 'Complete';
+        completeButton.addEventListener('click', function() {
+            li.classList.toggle('completed');
         });
-    });
-});
 
-// Contact form validation and submission
-const form = document.getElementById('contact-form');
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
+        // Add a "delete" button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('delete');
+        deleteButton.addEventListener('click', function() {
+            taskList.removeChild(li);
+        });
 
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
+        // Append elements to the list item
+        li.appendChild(span);
+        li.appendChild(completeButton);
+        li.appendChild(deleteButton);
 
-    // Basic form validation
-    if (name === '' || email === '' || message === '') {
-        alert('Please fill out all fields');
-        return;
+        // Append the list item to the task list
+        taskList.appendChild(li);
+
+        // Clear the input field
+        taskInput.value = '';
     }
-
-    // Example of form submission logic (e.g., send an email or save the data)
-    // For now, we'll just show a success message
-    alert(`Thank you for your message, ${name}! We will get back to you soon.`);
-
-    // Clear form fields after submission
-    form.reset();
 });
